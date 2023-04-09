@@ -1,5 +1,4 @@
 ﻿using eShopSolution.ViewModels.Catalog.Products;
-using eShopSolution.ViewModels.Catalog.Products.Manage;
 using eShopSolution.ViewModels.Common;
 using eShopSolution.Data.EF;
 using eShopSolution.Data.Entities;
@@ -105,19 +104,19 @@ namespace eShopSolution.Application.Catalog.Products
         //    throw new NotImplementedException();
         //}
 
-        public async Task<PagedResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request)
+        public async Task<PagedResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request)
         {
             // 1 Select Join
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
                         join pic in _context.ProductInCategories on p.Id equals pic.ProductId
                         join c in _context.Categories on pic.CategoryId equals c.Id
-                        where pt.Name.Contains(request.keyWord)
+                        where pt.Name.Contains(request.Keyword)
                         select new { p, pt, pic, c };
             // 2 Filter 
-            if (!string.IsNullOrEmpty(request.keyWord))
+            if (!string.IsNullOrEmpty(request.Keyword))
             {
-                query = query.Where(x => x.pt.Name.Contains(request.keyWord));
+                query = query.Where(x => x.pt.Name.Contains(request.Keyword));
             }
 
             if (request.CategoryIds.Count > 0)

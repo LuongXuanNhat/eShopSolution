@@ -1,6 +1,5 @@
 ﻿
 using eShopSolution.ViewModels.Catalog.Products;
-using eShopSolution.ViewModels.Catalog.Products.Public;
 using eShopSolution.ViewModels.Common;
 using System;
 using System.Collections.Generic;
@@ -11,11 +10,8 @@ namespace eShopSolution.Application.Catalog.Products
 {
     public interface IPublicProductService // Chữ I đầu tên class là Interface
     {
-       Task< PagedResult<ProductViewModel>> GetAllByCategoryId(GetProductPagingRequest request);
-        
-        // Chi danh cho admin
-        //int Create(ProductCreateRequest createRequest);
-        //int Update(ProductUpdateRequest editRequest);
-        //int Delete(int ProductId);
+       Task< PagedResult<ProductViewModel>> GetAllByCategoryId(GetPublicProductPagingRequest request);
+
+        Task<List<ProductViewModel>> GetAll();
     }
 }
