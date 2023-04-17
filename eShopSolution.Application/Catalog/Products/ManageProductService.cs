@@ -25,8 +25,10 @@ namespace eShopSolution.Application.Catalog.Products
             _storageService = storageService;
         }
 
-        public Task<int> AddImages(int productId, List<IFormFile> files)
+        public async Task<int> AddImages(int productId, List<IFormFile> files)
         {
+            //var product = await _context.Products.FindAsync(productId);
+            //return product;
             throw new NotImplementedException();
         }
 
@@ -58,13 +60,15 @@ namespace eShopSolution.Application.Catalog.Products
                         SeoAlias = createRequest.SeoAlias,
                         SeoDescription = createRequest.SeoDescription,
                         SeoTitle = createRequest.SeoTitle,
-
+                        LanguageId = createRequest.LanguageId
                     }
                 }
             };
             // Save image
             // Xem lai
-            product.ProductImages = new List<ProductImage>()
+            if (createRequest.ThumbnailImage != null)
+            {
+                product.ProductImages = new List<ProductImage>()
                 {
                     new ProductImage()
                     {
@@ -76,8 +80,10 @@ namespace eShopSolution.Application.Catalog.Products
                         SortOrder = 1
                     }
             };
+            }
             _context.Products.Add(product);
-            return await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+            return product.Id;
         }
 
         public async Task<int> Delete(int ProductId)
@@ -155,6 +161,30 @@ namespace eShopSolution.Application.Catalog.Products
 
         }
 
+        public async Task<ProductViewModel> GetById(int productId, string languageId)
+        {
+            var product =await _context.Products.FindAsync(productId);
+            var productTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == productId && x.LanguageId == languageId);
+            var productViewModel = new ProductViewModel()
+            {
+                Id = product.Id,
+                DateCreated = product.DateCreated,
+                Description = productTranslation != null ? productTranslation.Description : null,
+                LanguageId = productTranslation.LanguageId,
+                Details = productTranslation != null ? productTranslation.Details : null,
+                Name = productTranslation != null ? productTranslation.Name : null,
+                OriginalPrice = product.OriginalPrice,
+                Price = product.Price,
+                SeoAlias = productTranslation != null ? productTranslation.SeoAlias : null,
+                SeoDescription = productTranslation != null ? productTranslation.SeoDescription : null,
+                SeoTitle = productTranslation != null ? productTranslation.SeoTitle : null,
+                Stock = product.Stock,
+                ViewCount = product.ViewCount
+
+            };
+            return productViewModel;
+        }
+
         public Task<List<ViewModels.Catalog.Products.ProductImageViewModel>> GetListImage(int productId)
         {
             throw new NotImplementedException();
@@ -227,7 +257,7 @@ namespace eShopSolution.Application.Catalog.Products
 
         private async Task<string> SaveFile(IFormFile file)
         {
-            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName;
+            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
             await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
             return fileName;

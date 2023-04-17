@@ -1,4 +1,5 @@
 using eShopSolution.Application.Catalog.Products;
+using eShopSolution.Application.Common;
 using eShopSolution.Data.EF;
 using eShopSolution.Utilities.Contants;
 using Microsoft.AspNetCore.Builder;
@@ -33,6 +34,8 @@ namespace eShopSolution.BackendApi
 
             // DEclare DI - xin tham quyen
             services.AddTransient<IPublicProductService, PublicProductService>();
+            services.AddTransient<IManageProductService, ManageProductService>();
+            services.AddTransient<IStorageService, FileStorageService>();
             
             services.AddControllersWithViews();
 
