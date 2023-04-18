@@ -36,7 +36,7 @@ namespace eShopSolution.Application.System.Users
                 //throw new eShopException("Cannot find user name");
             }
 
-            var result = await _signInManager.PasswordSignInAsync( user, request.PassWord, request.RememberMe,true);
+            var result = await _signInManager.PasswordSignInAsync( user, request.Password, request.RememberMe,true);
             if (!result.Succeeded)
             {
                 return null;
