@@ -20,8 +20,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace eShopSolution.BackendApi
 {
@@ -37,6 +35,7 @@ namespace eShopSolution.BackendApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient();
             services.AddDbContext<EShopDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString(SystemContants.MainConnectionString)));
 
@@ -61,6 +60,7 @@ namespace eShopSolution.BackendApi
             services.AddControllers()
                 .AddFluentValidation(f=> f.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Swagger eShop Solution", Version = "v1" });
