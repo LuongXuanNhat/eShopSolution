@@ -14,7 +14,7 @@ namespace eShopSolution.AdminApp.Services
         private readonly IHttpClientFactory _httpClientFactory;
         public UserApiClient(IHttpClientFactory httpClientFactory)
         {
-            httpClientFactory = _httpClientFactory;
+            _httpClientFactory = httpClientFactory;
         }
         public async Task<string> Authenticate(LoginRequest request)
         {

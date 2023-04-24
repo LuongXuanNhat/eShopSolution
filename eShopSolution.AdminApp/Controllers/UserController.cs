@@ -51,7 +51,7 @@ namespace eShopSolution.AdminApp.Controllers
             var authProperties = new AuthenticationProperties
             {
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
-                IsPersistent = true
+                IsPersistent = false
             };
             await HttpContext.SignInAsync(
                         CookieAuthenticationDefaults.AuthenticationScheme,
