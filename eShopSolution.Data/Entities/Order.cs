@@ -18,6 +18,7 @@ namespace eShopSolution.Data.Entities
 
         // Tao quan he 1-n (OrderDetail la so nhieu)
         public List<OrderDetail> OrderDetails { get; set; }
+        public AppUser AppUser { get; set; }
 
 
     }
